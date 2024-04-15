@@ -7,7 +7,7 @@ import java.util.*;
 
 @RestController
 @ResponseBody
-@RequestMapping("/data/products")
+@RequestMapping("/data/products/")
 public class ProductsController {
 
     private Map<Integer, List<String>> tmpProducts;
@@ -19,7 +19,7 @@ public class ProductsController {
         tmpProducts.put(3, new ArrayList<>(Arrays.asList("product3", "14.99")));
     }
 
-    @GetMapping
+    @GetMapping("/products/all")
     public String getProducts() {
         String jsonString = null;
         ObjectMapper mapper  = new ObjectMapper();
@@ -32,12 +32,12 @@ public class ProductsController {
         return jsonString;
     }
 
-    @GetMapping
-    public String getProductById(@RequestParam("id") int productId) {
+    @GetMapping("/products/{id}")
+    public String getProductById(@PathVariable int id) {
         String jsonString = null;
         ObjectMapper mapper  = new ObjectMapper();
         try {
-            jsonString = mapper.writeValueAsString(tmpProducts.get(productId));
+            jsonString = mapper.writeValueAsString(tmpProducts.get(id));
         } catch (Exception e) {
             e.printStackTrace();
         }
