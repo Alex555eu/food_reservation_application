@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
 @Entity
-public class Session {
+public class ProductCategory {
 
     @Id
     @GeneratedValue(generator = "uuid")
@@ -17,15 +17,11 @@ public class Session {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "modified_at")
-    private LocalDateTime modifiedAt;
+    private String name;
 
-    @OneToOne(targetEntity = AppUser.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private AppUser appUser;
+    private String description;
 
-    @ManyToOne
-    private CartItem cartItem;
-
+    @ManyToMany(mappedBy = "productCategories")
+    private Set<Product> products;
 
 }

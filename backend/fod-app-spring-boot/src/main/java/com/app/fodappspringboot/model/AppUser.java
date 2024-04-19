@@ -27,4 +27,7 @@ public class AppUser {
     @Column(name = "email_address")
     private String emailAddress;
 
+    @Column(name = "authorization_level")
+    private Integer authorizationLevel;
+
 }

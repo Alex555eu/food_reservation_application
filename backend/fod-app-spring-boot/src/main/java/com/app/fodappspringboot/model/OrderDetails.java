@@ -32,8 +32,8 @@ public class OrderDetails {
     @Column(name = "additional_info")
     private String additionalInfo;
 
-/*    @OneToMany(targetEntity = AppUser.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id",  referencedColumnName = "id", insertable = false, updatable = false)
-    private List<AppUser> appUserList;*/
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
 
 }
