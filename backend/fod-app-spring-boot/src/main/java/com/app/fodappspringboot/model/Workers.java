@@ -16,12 +16,13 @@ public class Workers {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @OneToOne(targetEntity = AppUser.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private AppUser appUser;
+    @OneToOne(targetEntity = User.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User appUser;
 
     @OneToOne(targetEntity = Store.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "store_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "store_id", referencedColumnName = "id")
     private Store store;
+
 
 }
