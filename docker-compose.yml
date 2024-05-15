@@ -1,14 +1,23 @@
 version: '3.8'
 
 services:
-  db:
+  spring-boot:
+    container-name: back-spring-boot
     build:
-      context: .
-      dockerfile: postgresql/Dockerfile
-    ports:
-      - "5433:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data/
+        context: .
+        dockerfile: ./email_mservice/Dockerfile
+        ports:
+          - 9090:9090
+
+    db:
+      container-name: db
+      build:
+        context: .
+        dockerfile: postgresql/Dockerfile
+      ports:
+        - "5433:5432"
+      volumes:
+        - pgdata:/var/lib/postgresql/data/
 
 volumes:
   pgdata:
