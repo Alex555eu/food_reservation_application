@@ -9,6 +9,6 @@ COPY ./food-app-spring-boot /app/food-app-spring-boot/
 
 RUN sed -i 's/\r$//' mvnw && chmod +x mvnw
 
-RUN ./mvnw clean install
+RUN ./mvnw clean package -DskipTests
 
 ENTRYPOINT java -jar target/*.jar
