@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Data
 @Entity
-public class AppUser {
+public class Workers {
 
     @Id
     @GeneratedValue(generator = "uuid")
@@ -16,18 +16,13 @@ public class AppUser {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    private String password;
+    @OneToOne(targetEntity = User.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User appUser;
 
-    @Column(name = "first_name")
-    private String firstName;
+    @OneToOne(targetEntity = Store.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "store_id", referencedColumnName = "id")
+    private Store store;
 
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name = "email_address")
-    private String emailAddress;
-
-    @Column(name = "authorization_level")
-    private Integer authorizationLevel;
 
 }
