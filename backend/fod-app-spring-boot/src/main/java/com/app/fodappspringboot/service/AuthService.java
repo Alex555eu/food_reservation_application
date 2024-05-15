@@ -4,23 +4,40 @@ import com.app.fodappspringboot.dto.AuthenticationRequest;
 import com.app.fodappspringboot.dto.AuthenticationResponse;
 import com.app.fodappspringboot.dto.RegisterRequest;
 import com.app.fodappspringboot.model.Role;
+import com.app.fodappspringboot.model.Token;
 import com.app.fodappspringboot.model.User;
+import com.app.fodappspringboot.repository.TokenRepository;
 import com.app.fodappspringboot.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
@@ -31,9 +48,13 @@ public class AuthService {
         );
         User user = userRepository.findByEmailAddress(request.email())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        String jwtToken = jwtService.generateToken(user);
+        String jwtToken = "Bearer " + jwtService.generateToken(new HashMap<>(), user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -46,10 +67,59 @@ public class AuthService {
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
-        String token = jwtService.generateToken(user);
+        String jwtToken = "Bearer " + jwtService.generateToken(new HashMap<>(), user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
         return AuthenticationResponse.builder()
-                .token(token)
+                .token(jwtToken)
+                .refreshToken(refreshToken)
                 .build();
+    }
+
+    public ResponseEntity<AuthenticationResponse> refreshToken(
+            HttpServletRequest request
+    ) {
+        final String refreshToken = request.getHeader("Authorization");
+        final String userEmail;
+        if(refreshToken == null) {
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        userEmail = jwtService.extractUsername(refreshToken); // todo: catch exception (invalid token)
+
+        if (userEmail != null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            Optional<Token> persistedToken = tokenRepository.findByUser((User)userDetails);
+            if (jwtService.isTokenValid(refreshToken, userDetails) && persistedToken.isPresent() && persistedToken.get().isValid()) {
+                revokeAllUserTokens((User)userDetails);
+                String jwtToken = "Bearer " + jwtService.generateToken(new HashMap<>(), userDetails);
+                String newRefreshToken = jwtService.generateRefreshToken(userDetails);
+                saveUserToken((User)userDetails, jwtToken);
+                AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
+                        .token(jwtToken)
+                        .refreshToken(newRefreshToken)
+                        .build();
+
+                return ResponseEntity.ok(authenticationResponse);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    private void saveUserToken(User user, String jwtToken) {
+        String stripped = jwtToken.substring(7);
+        Token token = Token.builder()
+                .user(user)
+                .jwtToken(stripped)
+                .isValid(true)
+                .tokenType("Bearer")
+                .build();
+
+        tokenRepository.save(token);
+    }
+
+    private void revokeAllUserTokens(User user) {
+        tokenRepository.removeAllByUser(user);
     }
 
 }
