@@ -1,16 +1,24 @@
-<nav class="navbar">
-    <div class="container">
-      <a routerLink="/" class="navbar-brand">My App</a>
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a routerLink="/home" class="nav-link">Home</a>
-        </li>
-        <li class="nav-item">
-          <a routerLink="/products" class="nav-link">Products</a>
-        </li>
-        <li class="nav-item">
-          <a routerLink="/login" class="nav-link">Login</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+
+<div class="navbar-bg" id="nbbg">
+  <img id="desktop-bg-01" src="../../../assets/public/website-images/slice_01.svg">
+  <img id="mobile-bg-01" src="../../../assets/public/website-images/slice_01_mob.svg">
+</div>
+
+<div class="navbar" id="myNavbar">
+  <div class="logo">
+      <a href="/main">
+          <img src="../../../assets/public/website-images/logo.svg">
+      </a>
+  </div>
+  <div class="icon">
+      <a href="javascript:void(1);" (click)="navbarResponse()">
+          &#9776;
+      </a>
+  </div>
+  <div class="options">
+      <a href="/products" (click)="navbarResponse()">Menu</a>
+      <a href="/locales" (click)="navbarResponse()">Locales</a>
+      <a href="/cart" (click)="navbarResponse()">Cart</a>
+      <a href="/user" (click)="navbarResponse()">myAccount</a>
+  </div>
+</div>

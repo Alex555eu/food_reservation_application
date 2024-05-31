@@ -7,4 +7,16 @@ import { Component } from '@angular/core';
 })
 export class NavbarComponent {
 
+
+  navbarResponse() {
+    const navbar = document.getElementById("myNavbar");
+    if (navbar !== null){
+      if (navbar.className === "navbar") {
+        navbar.className += " responsive";
+      } else {
+        navbar.className = "navbar";
+      }
+    }
+  }
+
 }
