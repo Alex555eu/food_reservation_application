@@ -18,8 +18,8 @@ import java.util.function.Function;
 public class JwtService {
 
     private final String SECRET_KEY = "527872436e7152783e34576e3e2927427578592776272e5a6e59584c37";//todo: get from .env
-    private final Long tokenExpiration = (long) (1000 * 60 * 3); // 1 minutes in millis //todo: get from .env
-    private final Long refreshTokenExpiration = (long) (1000 * 60 * 6); // 6 minutes in millis //todo: get from .env
+    private final Long tokenExpiration = (long) (1000 * 60 * 30); // 1 minutes in millis //todo: get from .env
+    private final Long refreshTokenExpiration = (long) (1000 * 60 * 60); // 6 minutes in millis //todo: get from .env
 
     public String generateRefreshToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails, refreshTokenExpiration);

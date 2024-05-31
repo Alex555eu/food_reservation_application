@@ -1,13 +1,20 @@
 package com.app.fodappspringboot.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
+@ToString(exclude = "products")
 @Entity
 public class ProductCategory {
 

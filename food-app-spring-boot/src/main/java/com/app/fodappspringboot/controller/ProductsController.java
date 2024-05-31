@@ -1,6 +1,12 @@
 package com.app.fodappspringboot.controller;
 
+import com.app.fodappspringboot.model.Product;
+import com.app.fodappspringboot.repository.ProductRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -10,39 +16,51 @@ import java.util.*;
 @RequestMapping("/api/v1/data/products/")
 public class ProductsController {
 
-    private Map<Integer, List<String>> tmpProducts;
+    private final ProductRepository productRepository;
+    private final ObjectMapper mapper;
 
-    public ProductsController() {
-        tmpProducts = new HashMap<>();
-        tmpProducts.put(1, new ArrayList<>(Arrays.asList("product1", "12.99")));
-        tmpProducts.put(2, new ArrayList<>(Arrays.asList("product2", "13.99")));
-        tmpProducts.put(3, new ArrayList<>(Arrays.asList("product3", "14.99")));
+    public ProductsController(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+        this.mapper = new ObjectMapper();
+
     }
 
-    @GetMapping("/all")
-    public String getProducts() {
-        String jsonString = null;
-        ObjectMapper mapper  = new ObjectMapper();
-        try {
-            jsonString = mapper.writeValueAsString(tmpProducts);
-        } catch (Exception e) {
-            e.printStackTrace();
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getProducts() throws JsonProcessingException {
+        List<Product> result = productRepository.findAll();
+        if (!result.isEmpty()) {
+            String response = mapper.writeValueAsString(result);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(response);
         }
-
-        return jsonString;
+        return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/{id}")
-    public String getProductById(@PathVariable int id) {
-        String jsonString = null;
-        ObjectMapper mapper  = new ObjectMapper();
-        try {
-            jsonString = mapper.writeValueAsString(tmpProducts.get(id));
-        } catch (Exception e) {
-            e.printStackTrace();
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getProductById(@PathVariable UUID id) throws JsonProcessingException {
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isPresent()) {
+            String response = mapper.writeValueAsString(product.get());
+            return ResponseEntity
+                    .ok()
+                    .body(response);
+        } else {
+            return ResponseEntity.notFound().build();
         }
+    }
 
-        return jsonString;
+    @GetMapping(value = "/category/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getProductByCategoryName(@PathVariable String name) throws JsonProcessingException {
+        List<Product> products = productRepository.findByCategoryName(name);
+        if (!products.isEmpty()) {
+            String response = mapper.writeValueAsString(products);
+            return ResponseEntity
+                    .ok()
+                    .body(response);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 
