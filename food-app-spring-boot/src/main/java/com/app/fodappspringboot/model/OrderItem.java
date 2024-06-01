@@ -1,13 +1,20 @@
 package com.app.fodappspringboot.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "order_item")
 public class OrderItem {
 
     @Id
@@ -24,12 +31,6 @@ public class OrderItem {
     @JoinColumn(name = "order_details_id")
     private OrderDetails orderDetails;
 
-    private Double quantity;
-
-    @Column(columnDefinition = "COMMENT '" +
-            "0 - item in cart" +
-            "1 - item ordered" +
-            "2 - order received'")
-    private Integer progressStatus;
+    private Integer quantity;
 
 }

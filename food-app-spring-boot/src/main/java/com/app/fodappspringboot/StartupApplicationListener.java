@@ -1,20 +1,17 @@
 package com.app.fodappspringboot;
 
-import com.app.fodappspringboot.model.Product;
-import com.app.fodappspringboot.model.ProductCategory;
-import com.app.fodappspringboot.model.Role;
-import com.app.fodappspringboot.model.User;
-import com.app.fodappspringboot.repository.ProductCategoryRepository;
-import com.app.fodappspringboot.repository.ProductRepository;
-import com.app.fodappspringboot.repository.UserRepository;
+import com.app.fodappspringboot.model.*;
+import com.app.fodappspringboot.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NonNull;
+import org.hibernate.type.descriptor.java.LocalDateTimeJavaType;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @AllArgsConstructor
@@ -25,6 +22,9 @@ public class StartupApplicationListener implements ApplicationListener<Applicati
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final ProductCategoryRepository productCategoryRepository;
+    private final StoreRepository storeRepository;
+    private final OrderDetailsRepository orderDetailsRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @Override
     public void onApplicationEvent(@NonNull ApplicationReadyEvent event) {
@@ -179,5 +179,45 @@ public class StartupApplicationListener implements ApplicationListener<Applicati
                 .productCategories(donutSet)
                 .build();
         productRepository.save(product12);
+
+        Store store = new Store();
+        store.setAddress("ul. Warszawska 24");
+        store.setCity("Krakow");
+        store.setPostalCode("30-300");
+        storeRepository.save(store);
+
+        Store store2 = new Store();
+        store2.setAddress("ul. Starowka 1");
+        store2.setCity("Krakow");
+        store2.setPostalCode("30-301");
+        storeRepository.save(store2);
+
+/*
+        OrderDetails orderDetails = new OrderDetails();
+        orderDetails.setTotal(BigDecimal.valueOf(100));
+        orderDetails.setStore(store);
+        orderDetails.setProgressStatus(0);
+        Optional<User> user2 = userRepository.findByEmailAddress(user.getEmailAddress());
+        orderDetails.setUserId(user2.get().getId());
+        orderDetails.setAdditionalInfo("test");
+        orderDetailsRepository.save(orderDetails);
+
+
+
+        OrderItem orderItem = new OrderItem();
+        orderItem.setOrderDetails(orderDetails);
+        orderItem.setProduct(product);
+        orderItem.setQuantity(2);
+        orderItemRepository.save(orderItem);
+
+        OrderItem orderItem2 = new OrderItem();
+        orderItem2.setOrderDetails(orderDetails);
+        orderItem2.setProduct(product2);
+        orderItem2.setQuantity(3);
+        orderItemRepository.save(orderItem2);*/
+
+
+
+
     }
 }

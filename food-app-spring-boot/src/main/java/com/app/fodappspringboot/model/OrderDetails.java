@@ -1,7 +1,10 @@
 package com.app.fodappspringboot.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 
@@ -12,6 +15,9 @@ import java.util.UUID;
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "order_details")
 public class OrderDetails {
 
@@ -32,8 +38,13 @@ public class OrderDetails {
     @Column(name = "additional_info")
     private String additionalInfo;
 
+/*    @OneToMany(mappedBy = "orderDetails", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<OrderItem> orderItems;*/
+
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
+
+    private Integer progressStatus;
 
 }

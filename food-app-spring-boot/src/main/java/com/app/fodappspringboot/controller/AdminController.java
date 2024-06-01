@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/v1/admin")
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/admin")
 public class AdminController {
 
     @GetMapping
