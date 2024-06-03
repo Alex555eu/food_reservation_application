@@ -1,10 +1,30 @@
-<div class="product-list">
-  <h2>Products</h2>
-  <ul>
-    <li *ngFor="let product of products">
-      <a [routerLink]="['/products', product.id]">
-        {{ product.name }} - ${{ product.price }}
-      </a>
-    </li>
-  </ul>
+
+<link href='https://fonts.googleapis.com/css?family=Knewave' rel='stylesheet'>
+
+
+<div class="products-container" id="products-container">
+  <div class="search-bar-container">
+      <select id="choose_category_id" name="selected_category">
+          <option value="">All Products</option>
+          <!-- Categories -->
+      </select>
+      <input id="search-bar" type="text" placeholder="Search">
+  </div>
+
+  <div class="product-list">
+    <div *ngFor="let product of products">
+      <div class="product_wrapper">
+          <a  [routerLink]="['/products', product.id]">
+              <div class="product">
+                  <div class="product_img">
+                      <img src="{{ product.imagePath }}">
+                  </div>
+                  <h2>{{ product.name }}</h2>
+                  <p>${{ product.price }}</p>
+              </div>
+          </a>
+      </div>
+    </div>
+  </div>
+
 </div>

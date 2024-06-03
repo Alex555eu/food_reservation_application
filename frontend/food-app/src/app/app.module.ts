@@ -10,6 +10,7 @@ import { ProductListComponent } from './components/product-list/product-list.com
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     BrowserModule,
     RouterModule.forRoot([]), // Set up your root routing configuration here
     AppRoutingModule, // Import your AppRoutingModule for feature modules and lazy loading
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

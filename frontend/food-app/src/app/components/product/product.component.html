@@ -1,0 +1,22 @@
+
+<link href='https://fonts.googleapis.com/css?family=Knewave' rel='stylesheet'>
+<div class="pane">
+    <div class="product">
+      <div class="img_container">
+        <img [src]="product.imagePath" alt="no-image">
+      </div>
+  
+      <div class="product_info">
+        <output id="name">{{ product.name }}</output>
+        <output id="price">{{ product.price }} $</output>
+  
+        <form (ngSubmit)="addProductToCart()">
+          <input type="number" step="1" min="1" max="123" [(ngModel)]="productInCartQuantity" name="productInCartQuantity" required>
+          <button type="submit">Add</button>
+        </form>
+  
+        <output id="description">{{ product.description }}</output>
+      </div>
+    </div>
+  </div>
+  

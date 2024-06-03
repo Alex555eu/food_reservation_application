@@ -1,0 +1,35 @@
+<link href='https://fonts.googleapis.com/css?family=Knewave' rel='stylesheet'>
+<div class="shopping-cart">
+    <h2>Your Shopping Cart</h2>
+
+        <div *ngFor="let item of items" class="cart-item">
+            <img [src]="item.product.imagePath" alt="image path">
+            <div class="item-details">
+                <a [routerLink]="['/products', item.product.id]">
+                    <h3>{{ item.product.name }}</h3>
+                </a>
+                <p>Quantity: {{ item.quantity }}</p>
+                <p>Price: {{ item.product.price }} $</p>
+                <button (click)="removeFromCart(item.id)">Remove</button>
+            </div>
+        </div>
+
+      <div class="add-info">
+        <select id="store-selector" [(ngModel)]="selectedStore">
+            <option *ngFor="let store of stores" [value]="store.id">{{ store.city }}, {{ store.address }}</option>
+        </select>
+        <label>Additional Info</label>
+        <textarea name="info" [(ngModel)]="info"></textarea>
+      </div>
+
+      <div class="cart-summary">
+        <p>Total: {{ getTotalPrice() }} $</p>
+        <button id="clear-cart" (click)="clearCart()">Clear Cart</button>
+        <button  id="checkout" (click)="checkout()">Checkout</button>
+      </div>
+    
+    <ng-template #emptyCart>
+      <p>Your cart is empty</p>
+    </ng-template>
+  </div>
+  

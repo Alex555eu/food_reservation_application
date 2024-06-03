@@ -1,0 +1,24 @@
+
+
+
+
+<div class="register-container">
+    <div class="register-bg-container">
+        <div>
+            <img src="../../../assets/public/website-images/logo.svg" alt="logo img">
+        </div>
+        <span id="error-msg" [hidden]="!errorOccurred">Passwords dont match</span>
+        <form (ngSubmit)="register()">
+            <div id="left">
+                <input type="text" name="name" [(ngModel)]="name" placeholder="name" required>
+                <input type="text" name="surname" [(ngModel)]="surname" placeholder="surname" required>
+                <input type="email" name="email" [(ngModel)]="email" placeholder="email" required>
+            </div>
+            <div id="right">
+                <input type="password" id="password" name="password" placeholder="password" [(ngModel)]="password">
+                <input type="password" id="repeat-password" name="repeat-password" placeholder="repeat-password" [(ngModel)]="repeatPassword">
+                <button id="register-button" type="submit" >register</button>
+            </div>
+        </form>
+    </div>
+</div>
