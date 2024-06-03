@@ -73,6 +73,8 @@ public class OrdersController {
                 Optional<Store> store = storeRepository.findStoreById(request.storeId());
                 store.ifPresent(orderDetails::setStore);
 
+                orderDetails.setAdditionalInfo(request.text());
+
                 orderDetailsRepository.save(orderDetails);
                 return ResponseEntity
                         .status(HttpStatus.OK)

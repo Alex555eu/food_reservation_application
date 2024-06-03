@@ -1,0 +1,23 @@
+
+
+<div class="container">
+  <h2>Orders List</h2>
+  <ul>
+    <li *ngFor="let item of items">
+      <div class="item-header" (click)="toggleItem(item)">
+        {{ item.title }}
+        <span [ngClass]="{ 'rotate': item.expanded }">&#9654;</span>
+      </div>
+      <div *ngIf="item.expanded" class="item-details">
+        <ul>
+          <li *ngFor="let detail of getDetailKeys(item.details)">
+            <strong>{{ detail }}:</strong> {{ item.details[detail] }}
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</div>
+
+  
+  

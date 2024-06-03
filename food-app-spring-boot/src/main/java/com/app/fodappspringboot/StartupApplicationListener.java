@@ -29,13 +29,22 @@ public class StartupApplicationListener implements ApplicationListener<Applicati
     @Override
     public void onApplicationEvent(@NonNull ApplicationReadyEvent event) {
         User user = User.builder()
-                .firstName("tohru")
-                .lastName("kobayashi")
-                .emailAddress("dragon@maid.com")
-                .password(passwordEncoder.encode("password"))
-                .role(Role.USER)
+                .firstName("admin")
+                .lastName("admin")
+                .emailAddress("admin@admin.com")
+                .password(passwordEncoder.encode("admin"))
+                .role(Role.ADMIN)
                 .build();
         userRepository.save(user);
+
+        User user2 = User.builder()
+                .firstName("user")
+                .lastName("user")
+                .emailAddress("user@user.com")
+                .password(passwordEncoder.encode("user"))
+                .role(Role.USER)
+                .build();
+        userRepository.save(user2);
 
 
         ProductCategory donut = ProductCategory.builder()

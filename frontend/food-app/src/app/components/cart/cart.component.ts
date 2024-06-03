@@ -135,7 +135,7 @@ export class CartComponent implements OnInit {
     const headers = new HttpHeaders({
       'Authorization': `${token}`
     });
-    const body = { storeId: this.selectedStore.id };
+    const body = { storeId: this.selectedStore, text: this.info };
     this.http.put<any>(`http://localhost:9090/api/v1/data/order/make`, body, { headers })
       .subscribe(data => {
         window.location.reload();

@@ -1,0 +1,21 @@
+
+
+<div class="user-container" *ngIf="user">
+    <div class="user_wrapper">
+        <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+            <div class="user_data">
+                <input type="text" name="name" [(ngModel)]="user.name" required>
+                <output>name</output>
+                <input type="text" name="surname" [(ngModel)]="user.surname" required>
+                <output>surname</output>
+                <input type="email" name="email" [(ngModel)]="user.email" readonly>
+                <output>email</output>
+                <button type="submit" [disabled]="!userForm.form.valid">Save Changes</button>
+            </div>
+        </form>
+        <button id="logout-btn" (click)="logout()">Logout</button>
+        <div id="admin-panel" *ngIf="user.role === 'ADMIN'">
+            <a href="/admin">Admin Panel</a>
+        </div>
+    </div>
+</div>
